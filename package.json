@@ -1,0 +1,37 @@
+{
+  "name": "onesait-cloud-platform-dashboard-dev",
+  "version": "1.0.0",
+  "description": "",
+  "private": true,
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "watch": "webpack --watch",
+    "build": "webpack",
+    "start": "webpack-dev-server --open",
+    "server": "node server.js",
+    "preparews": "node dev/dev-scripts/preparews.js",
+    "buildmodel": "node dev/dev-scripts/buildmodel.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "clean-webpack-plugin": "^3.0.0",
+    "copy-webpack-plugin": "^5.1.1",
+    "css-loader": "^3.4.0",
+    "express": "^4.17.1",
+    "figlet": "^1.2.4",
+    "html-loader": "^0.5.5",
+    "raw-loader": "^4.0.0",
+    "style-loader": "^1.1.2",
+    "webpack-cli": "^3.3.10",
+    "webpack-dev-server": "^3.10.1",
+    "webpack-hot-middleware": "^2.25.0"
+  },
+  "dependencies": {
+    "html-webpack-plugin": "^3.2.0",
+    "lodash": "^4.17.15",
+    "webpack": "^4.41.4"
+  }
+}
