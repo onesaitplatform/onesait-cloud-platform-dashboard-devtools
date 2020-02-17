@@ -26,13 +26,12 @@
 		<meta name="keywords" content="smart,cities,platform,Indra"/>
 		<meta name="author" content="Indra Sistemas, S.A."/>
 		
-		<%= require('../../src/' + htmlWebpackPlugin.options.id + '/headerLibs.html') %>
+		<%= require('../../src/' + htmlWebpackPlugin.options.idpath + '/headerLibs.html') %>
 	
 	</head>	
 	
 	
-	<!-- <script src="../env/env.js"></script> -->
-	<!--<script src="/controlpanel/static/js/pages/dashboardMessageHandler.js"></script>-->
+	<script src="https://cdn.jsdelivr.net/npm/alasql@0.5"></script>
 
   	<script>
     
@@ -54,6 +53,7 @@
 		window.__env.dashboardEngineMockModelPath = "/models/"
 		window.__env.dashboardEngineMockDataPath = "datamock/data.json"
 		window.__env.dashboardEngineMockTemplatePath = "templates/"
+		window.__env.usesqltodatasource = true
 		
 	 
      //Function that catch url parameters and return these like a map   

@@ -117,7 +117,10 @@ md-tabs.md-default-theme md-ink-bar, md-tabs md-ink-bar{
   color: #0e668c;
   background: #0e668c;
 }
-
+md-nav-bar.md-default-theme md-nav-ink-bar, md-nav-bar md-nav-ink-bar {
+  color: #0e668c !important;
+  background: #0e668c !important;
+}
 .md-tab{
   color: #888A91 ;
   font-family: "Soho";
@@ -126,6 +129,10 @@ md-tabs.md-default-theme md-ink-bar, md-tabs md-ink-bar{
   letter-spacing: 0.2px;
   line-height: 24px;
 
+}
+
+.md-button.md-default-theme.md-accent, .md-button.md-accent {
+  color: #0e668c;
 }
 
 .ods-picker-panel.ods-date-range-picker.ods-popper.has-time{
@@ -149,6 +156,10 @@ md-tabs.md-default-theme md-ink-bar, md-tabs md-ink-bar{
 
 .badgesMarginRightNoEditMode {
   margin-right: 55px;
+}
+.warning::before {
+  content:''!important;
+  background-color:transparent !important;
 }
 html, body {
   height: 100vh;
@@ -939,8 +950,8 @@ md-menu-item > .md-button span{
   display:table-cell; 
   vertical-align:middle; 
   text-align:center;
-  height: 100px;
-  width: 100px;
+  height: 80px;
+  width: 80px;
   border-color: #E6EDF3!important;
   border-width: 2px;
   border-style: solid;

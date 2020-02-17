@@ -47,10 +47,10 @@ process.argv.slice(2).forEach(
         var contents = fs.readFileSync(path.join(defPath,`${dashboardId}.json`));
         var jsonModel = JSON.parse(contents);
         var model = JSON.parse(jsonModel.model);
-        walkAndSet(path.join(workspacePath,dashboardId),model).then(
+        walkAndSet(path.join(workspacePath,`${jsonModel.id}(${jsonModel.identification})`),model).then(
             () => {
                 jsonModel.model = JSON.stringify(model);
-                jsonModel.headerlibs = fs.readFileSync(path.join(workspacePath,dashboardId,`headerLibs.html`),'utf8')
+                jsonModel.headerlibs = fs.readFileSync(path.join(workspacePath,`${jsonModel.id}(${jsonModel.identification})`,`headerLibs.html`),'utf8')
                 fs.writeFile(
                     path.join(outputPath,`${dashboardId}.json`),
                     JSON.stringify(jsonModel),

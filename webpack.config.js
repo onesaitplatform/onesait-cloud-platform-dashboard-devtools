@@ -9,7 +9,14 @@ const { readdirSync, writeFileSync, statSync } = require('fs')
 const getDirectories = source =>
     readdirSync(source, { withFileTypes: true })
         .filter(dirent => dirent.isDirectory())
-        .map(dirent => dirent.name)
+        .map(dirent => {
+            return {
+                id : dirent.name.split("(")[0],
+                identification : dirent.name.split("(")[1].slice(0,-1),
+                idpath : dirent.name
+            }
+        }
+    )
 
 var dashboards = getDirectories("src");
 
@@ -19,7 +26,7 @@ Plugins.push(new HtmlWebpackPlugin(
     {
         title: "Dev Dashboard Index",
         filename: "index.html",
-        dashboards: dashboards.map(dashboard => `<br/><a href="${dashboard}/">${dashboard}</a>`),
+        dashboards: dashboards.map(dashboard => `<br/><a href="${dashboard.id}/">${dashboard.identification}</a>`),
         inject: false,
         template: './dev/templates/index.html.ejs'
     }));
@@ -28,8 +35,9 @@ dashboards.forEach(
     dashboard => Plugins.push(new HtmlWebpackPlugin(
         {
             title: "Dev " + dashboard,
-            filename: dashboard + "/index.html",
-            id: dashboard,
+            filename: dashboard.id + "/index.html",
+            id: dashboard.id,
+            idpath: dashboard.idpath,
             inject: false,
             template: './dev/templates/view.html.ejs'
         }))
@@ -41,14 +49,16 @@ Plugins.push(
 
 Plugins.push(new CopyPlugin([
     { from: './dev/local-libs', to: 'local-libs' },
-    { from: './models/downloaded', to: 'models' },
     { from: './dev/local-resources/dashboards', to: 'controlpanel/static/images/dashboards' },
     { from: './dev/local-resources/soho', to: 'font/soho' }
 ].concat(dashboards.flatMap(
-    dashboard => { 
+    dashboard => {
+        console.log(`./models/downloaded/${dashboard.identification}.json`)
+        console.log(`models/${dashboard.id}`)
         return [
-            {'from': `./src/${dashboard}/**/*`, to: `${dashboard}/templates/`,flatten: true},
-            {'from': `./src/${dashboard}/data.json`, to: `${dashboard}/datamock/data.json`}
+            {'from': `./src/${dashboard.idpath}/**/*`, to: `${dashboard.id}/templates/`,flatten: true},
+            {'from': `./src/${dashboard.idpath}/data.json`, to: `${dashboard.id}/datamock/data.json`},
+            {'from': `./models/downloaded/${dashboard.identification}.json`, to: `models/${dashboard.id}.json` }
         ]
     }
 ))
@@ -67,8 +77,6 @@ function walkAndSet(dir) {
         };
     });
 }
-
-walkAndSet("src/Visualize OpenFlights Data");
 
 writeFileSync(
     path.join("src","index.js"),

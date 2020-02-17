@@ -26,11 +26,11 @@ var generateWorkspaceByModel = jsonModel => {
                         (gadget,gadgetIndex) => {
                             if(gadget.type === 'livehtml'){
                                 fs.mkdirSync(
-                                    path.join(workspacePath,jsonModel.identification,`(${pageIndex}) ${page.title}`,`${gadget.header.title.text}(${gadget.id})`),
+                                    path.join(workspacePath,`${jsonModel.id}(${jsonModel.identification})`,`(${pageIndex}) ${page.title}`,`${gadget.header.title.text}(${gadget.id})`),
                                     {recursive: true}
                                 );
                                 fs.writeFile(
-                                    path.join(workspacePath,jsonModel.identification,`(${pageIndex}) ${page.title}`,`${gadget.header.title.text}(${gadget.id})`,`${gadget.id}.js`),
+                                    path.join(workspacePath,`${jsonModel.id}(${jsonModel.identification})`,`(${pageIndex}) ${page.title}`,`${gadget.header.title.text}(${gadget.id})`,`${gadget.id}.js`),
                                     gadget.contentcode?gadget.contentcode:"",
                                     (err) => {
                                         if (err) throw err;
@@ -38,7 +38,7 @@ var generateWorkspaceByModel = jsonModel => {
                                     }
                                 );
                                 fs.writeFile(
-                                    path.join(workspacePath,jsonModel.identification,`(${pageIndex}) ${page.title}`,`${gadget.header.title.text}(${gadget.id})`,`${gadget.id}.html`),
+                                    path.join(workspacePath,`${jsonModel.id}(${jsonModel.identification})`,`(${pageIndex}) ${page.title}`,`${gadget.header.title.text}(${gadget.id})`,`${gadget.id}.html`),
                                     gadget.content?gadget.content:"",
                                     (err) => {
                                         if (err) throw err;
@@ -51,7 +51,7 @@ var generateWorkspaceByModel = jsonModel => {
         )
     )
     fs.writeFile(
-        path.join(workspacePath,jsonModel.identification,`headerLibs.html`),
+        path.join(workspacePath,`${jsonModel.id}(${jsonModel.identification})`,`headerLibs.html`),
         jsonModel.headerlibs?jsonModel.headerlibs:"",
         (err) => {
             if (err) throw err;
