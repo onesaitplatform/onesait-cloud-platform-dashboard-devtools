@@ -7373,10 +7373,12 @@ DatadiscoveryController.$inject = ["$log", "$scope", "datasourceSolverService", 
     }
 
     vm.executeAlasql = function(datasource){
-      console.log("Mock alasql for: " + JSON.stringify(datasource));
+      console.log("DS: Mock alasql for: " + JSON.stringify(datasource));
       var alasQuery = vm.generateAlasql(datasource);
-      console.log("Mock alasql: " + alasQuery);
-      return alasql(alasQuery,[vm.cachedData[datasource.msg.ds]]);
+      console.log("QUERY: Mock alasql: " + alasQuery);
+      var result = alasql(alasQuery,[vm.cachedData[datasource.msg.ds]]);
+      console.log("RESULT: Mock alasql: " + JSON.stringify(result));
+      return result;
     }
 
     vm.generateAlasql = function(datasource){
@@ -7394,7 +7396,7 @@ DatadiscoveryController.$inject = ["$log", "$scope", "datasourceSolverService", 
       sb+=query;
       sb+=buildWhere(where, "", true, "");
       sb+=buildGroup(group);
-      sb+=buildHaving(where);
+      sb+=buildHaving(where, "", true);
       sb+=buildSort(sort);
       if(maxreg && maxreg != -1){
         sb+=" limit ";
@@ -7418,7 +7420,7 @@ DatadiscoveryController.$inject = ["$log", "$scope", "datasourceSolverService", 
           sb += p.op;
           sb+="(";
         }
-        sb+=p.field.replace(".","->");
+        sb+="`" + p.field.split(".").join("`->`") + "`";
         if(p.op){
           sb+=")";
         }
@@ -7443,44 +7445,52 @@ DatadiscoveryController.$inject = ["$log", "$scope", "datasourceSolverService", 
 			return "";
 		} else {
 			var sb = "";
-			if (includeWhere)
-				sb+=" where ";
 			for (var f in filters) {
         f=filters[f];
         if(!isHavingExp(f.field)){
           sb+=prefix;
-          sb+=f.field.replace(".","->");
+          sb+="`" + f.field.split(".").join("`->`") + "`";
           sb+=" ";
-          sb+=f.op;
+          sb+=f.op; 
           sb+=" ";
           sb+=f.exp;
           sb+=" and ";
         }
 			}
-			return sb.substring(0, sb.length - 5);
+			if (includeWhere && sb != ""){
+        sb=" where " + sb;
+        return sb.substring(0,sb.length-5);
+      }
+      else{
+        return "";
+      }
 		}
   }
   
-  function buildHaving(filters, prefix, includeWhere) {
+  function buildHaving(filters, prefix, includeHaving) {
 		if (filters == null || filters.length == 0) {
 			return "";
 		} else {
 			var sb = "";
-			if (includeWhere)
-				sb+=" having ";
 			for (var f in filters) {
         f=filters[f];
         if(isHavingExp(f.field)){
           sb+=prefix;
-          sb+=f.field.replace(".","->");
+          sb+=f.field.split(".").join("->");
           sb+=" ";
           sb+=f.op;
           sb+=" ";
           sb+=f.exp;
           sb+=" and ";
         }
-			}
-			return sb.substring(0, sb.length - 5);
+      }
+      if (includeHaving && sb != ""){
+        sb=" having " + sb;
+        return sb.substring(0,sb.length-5);
+      }
+      else{
+        return "";
+      }
 		}
 	}
 
@@ -7492,7 +7502,7 @@ DatadiscoveryController.$inject = ["$log", "$scope", "datasourceSolverService", 
 			sb+=" group by ";
 			for (var g in groups) {
         g=groups[g];
-				sb+=g.replace(".","->");
+				sb+="`" + g.split(".").join("`->`") + "`";
 				sb+=",";
 			}
 			return sb.substring(0, sb.length - 1);
@@ -7507,7 +7517,7 @@ DatadiscoveryController.$inject = ["$log", "$scope", "datasourceSolverService", 
 			sb+=" order by ";
 			for (var s in sort) {
         s=sort[s];
-        sb+=s.field.replace(".","->");
+        sb+="`" + s.field.split(".").join("`->`") + "`";
         if(s.asc){
           sb+=" asc ";
         }
@@ -7911,6 +7921,9 @@ return interactionHash;
       }      
       for (var keyDest in destinationList) {
         var destinationFieldBundle = destinationList[keyDest];
+        if(!destinationFieldBundle){
+          continue;
+        }
         //Target list is not empty and field came from triggered gadget data
         if (destinationFieldBundle.targetList.length > 0 && destinationFieldBundle.emiterField in filterSourceFilterData) {
           for (var keyGDest in destinationFieldBundle.targetList) {
