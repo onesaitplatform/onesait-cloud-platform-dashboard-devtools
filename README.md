@@ -23,13 +23,13 @@ Steps for preparing workspace:
 
     For example:
 
-        npm run preparews VisualFlight
+        npm run preparews Visualize\ OpenFlights\ Data
 
     ![GitHub Logo](/images/2.png)
 
 1. That's all, you can now run the dashboard engine dev server and go to the index page and select your dashboard in http://localhost:3000
 
-        node run server
+        npm run server
 
 Steps for deploying workspace:
 
@@ -41,7 +41,7 @@ Steps for deploying workspace:
 
     For example:
 
-        npm run buildmodel VisualFlight
+        npm run buildmodel Visualize\ OpenFlights\ Data
     ![GitHub Logo](/images/3.png)
     
 1. Update dashboard in platform with the generated one in "/models/dist" folder
